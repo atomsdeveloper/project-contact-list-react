@@ -8,6 +8,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { NotFound } from "./components/NotFound";
 import { Header } from "./components/Header";
 import { Login } from "./components/Login";
+import { Register } from "./components/Register"
 
 // Lazy Components
 const Home = lazy(() => import("./Templates/Home"));
@@ -34,11 +35,10 @@ function App() {
       });
       const datas = await response.json();
 
-
       setContatos(datas.contatos);
       setCsrfToken(datas.csrfToken);
     } catch (error) {
-      console.log("Error ao buscar dados.", error);
+      console.log("Error ao buscar dados de contatos e csrfToken.", error);
     }
   }
   React.useEffect(() => {
@@ -53,6 +53,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home contatos={contatos} />} />
           <Route path="/login" element={<Login csrfToken={csrfToken} />} />
+          <Route path="/register" element={<Register csrfToken={csrfToken} />} />
           <Route path="*" element={<NotFound text="Página não encontrada." />} />
         </Routes>
       </Suspense>
