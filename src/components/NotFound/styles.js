@@ -15,7 +15,7 @@ export const MainContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: calc(100vh - 60px);
   animation: ${slide} 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 
   p {

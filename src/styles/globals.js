@@ -14,8 +14,10 @@ export const GlobalStyles = createGlobalStyle`
 		--color-8: #595959;
 		--color-9: #404040;
 		--color-10: #2e2e2e;
-		--color-11: #111111;
+		--color-11: #111111d9;
 		--color-12: #000000;
+		--color-12: #f03f3f;
+		--color-13: #df3131;
 
 		--color-p1: #f2e1ff;
 		--color-p2: #ddc8ff;
@@ -31,11 +33,11 @@ export const GlobalStyles = createGlobalStyle`
 		--gradient: linear-gradient(180deg, var(--color-p3) 0%, var(--color-p5) 100%);
 
 		/* Desktop Font sizes */
-		--poppins-12: 400 0.75rem/1.35 "Poppins", sans-serif;
-		--poppins-16: 400 1rem/1.5 "Poppins", sans-serif;
-		--poppins-18: 400 1.125rem/1.35 "Poppins", sans-serif;
+		--poppins-12: 100 0.75rem/1.35 "Poppins", sans-serif;
+		--poppins-16: 100 .9rem/1 "Poppins", sans-serif;
+		--poppins-18: 300 1.125rem/1.35 "Poppins", sans-serif;
 		--poppins-24: 400 1.5rem/1.5 "Poppins", sans-serif;
-		--poppins-32: 600 2rem/1.25 "Poppins", sans-serif;
+		--poppins-32: 500 2rem/1.25 "Poppins", sans-serif;
 	}
 
     /* Responsive Font Sizes */
