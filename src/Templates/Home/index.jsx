@@ -51,27 +51,29 @@ const Home = ({ contatos }) => {
         {console.log("Home: ", contatos)}
         {contatos ? (
           <S.Table>
-            {contatos.map(contato => (
-              <tr key={contato.id}>
-                <td>{contato.name}</td>
-                <td>{contato.tel}</td>
-                <td>{contato.email}</td>
-                <td>{formatDate(contato.created)}</td>
-                <td>
-                  <button id="edit">
-                    <Link to={`/contato/index/${contato.id}`}>
-                      Editar
-                    </Link>
-                  </button>
-                </td>
-                <td>
-                  <button id="delete">
-                    <Link to={`/contato/delete/${contato.id}`}>
-                      Excluir
-                    </Link>
-                  </button>
-                </td>
-              </tr>
+            {contatos.map((contato, index) => (
+              <tbody key={index}>
+                <tr>
+                  <td>{contato.name}</td>
+                  <td>{contato.tel}</td>
+                  <td>{contato.email}</td>
+                  <td>{formatDate(contato.created)}</td>
+                  <td>
+                    <button id="edit">
+                      <Link to={`/contato/index/${contato._id}`}>
+                        Editar
+                      </Link>
+                    </button>
+                  </td>
+                  <td>
+                    <button id="delete">
+                      <Link to={`/contato/delete/${contato._id}`}>
+                        Excluir
+                      </Link>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
             ))}
           </S.Table>
         ) : (
