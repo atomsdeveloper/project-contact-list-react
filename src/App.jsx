@@ -1,8 +1,10 @@
-
-import React, { Suspense, lazy } from "react";
+import React from "react";
 
 // Navegation
 import { Routes, Route, BrowserRouter } from "react-router-dom";
+
+// Context
+import { AuthProvider } from "./components/_context/authContext";
 
 // Components
 import { NotFound } from "./components/NotFound";
@@ -11,7 +13,7 @@ import { Login } from "./components/Login";
 import { Register } from "./components/Register"
 
 // Lazy Components
-const Home = lazy(() => import("./Templates/Home"));
+const Home = React.lazy(() => import("./Templates/Home"));
 
 // Loading
 export const Loading = () => {
@@ -47,18 +49,19 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Header />
+      <AuthProvider>
+        <Header />
 
-      <Suspense fallback={<Loading />}>
-        <Routes>
-          <Route path="/" element={<Home contatos={contatos} />} />
-          <Route path="/login" element={<Login csrfToken={csrfToken} />} />
-          <Route path="/register" element={<Register csrfToken={csrfToken} />} />
-          <Route path="*" element={<NotFound text="Página não encontrada." />} />
-        </Routes>
-      </Suspense>
+        <React.Suspense fallback={<Loading />}>
+          <Routes>
+            <Route path="/" element={<Home contatos={contatos} />} />
+            <Route path="/login" element={<Login csrfToken={csrfToken} />} />
+            <Route path="/register" element={<Register csrfToken={csrfToken} />} />
+            <Route path="*" element={<NotFound text="Página não encontrada." />} />
+          </Routes>
+        </React.Suspense>
+      </AuthProvider>
     </BrowserRouter>
   )
 }
-
 export default App
