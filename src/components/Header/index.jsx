@@ -1,12 +1,29 @@
+import React from "react";
+
 // Syled Components
 import * as S from "./styles";
 
 // Router
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../_context/authContext";
 
-// Types
-import P from "prop-types";
-export const Header = ({ user }) => {
+export const Header = () => {
+    const { hasUser, setHasUser } = useAuthContext();
+
+    const handleLogout = async () => {
+        const response = await fetch("http://localhost:3000/logout", {
+            method: "GET",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" }
+        });
+
+        if (response.ok) {
+            sessionStorage.removeItem("user");
+            sessionStorage.clear();
+            setHasUser(null);
+        }
+    };
+
     return (
         <S.Header>
             <S.Title>
@@ -24,7 +41,7 @@ export const Header = ({ user }) => {
                             Criar conta
                         </Link>
                     </li>
-                    {!user ? (
+                    {!hasUser ? (
                         <li>
                             <Link to="/login">
                                 Entrar
@@ -32,7 +49,10 @@ export const Header = ({ user }) => {
                         </li>
                     ) : (
                         <li>
-                            <Link to="/logout">
+                            <Link
+                                to="/"
+                                onClick={handleLogout}
+                            >
                                 Sair
                             </Link>
                         </li>
@@ -42,9 +62,3 @@ export const Header = ({ user }) => {
         </S.Header>
     );
 };
-Header.PropTypes = {
-    user: P.shape({
-        name: P.string.isRequired,
-        email: P.string.isRequired
-    }).isRequired
-}

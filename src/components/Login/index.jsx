@@ -9,9 +9,11 @@ import Swal from "sweetalert2";
 import P from "prop-types";
 
 // Helpers
-import Head from "../../components/helpers/Head";
+import Head from "../_helpers/Head";
+import { useAuthContext } from "../_context/authContext";
 
 export const Login = ({ csrfToken }) => {
+    const { setHasUser } = useAuthContext();
     const navigate = useNavigate();
 
     const fetchLogin = async (e) => {
@@ -28,14 +30,19 @@ export const Login = ({ csrfToken }) => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRF-Token": csrfToken,  // Enviando o token no cabeçalho
+                    "X-CSRF-Token": csrfToken,
                 },
                 credentials: 'include',
                 body: JSON.stringify({ email, password }),
             })
             const data = await response.json();
 
+            sessionStorage.setItem('user', JSON.stringify(data.auth));
+
             if (!data.errors) {
+                // Atualizar estado de user do Header component
+                setHasUser(data.auth);
+
                 Swal.fire({
                     title: "Sucesso!",
                     text: `${data.success[0]}`,
@@ -43,16 +50,19 @@ export const Login = ({ csrfToken }) => {
                     confirmButtonText: "OK",
                     confirmButtonColor: "#111111d9",
                 });
-                navigate("/");
-            }
 
-            data.errors && Swal.fire({
-                title: "Error!",
-                text: `${data.errors[0]}`,
-                icon: "error",
-                confirmButtonText: "OK",
-                confirmButtonColor: "#111111d9",
-            });
+                navigate("/");
+            };
+
+            if (data.errors) {
+                data.errors && Swal.fire({
+                    title: "Error!",
+                    text: `${data.errors[0]}`,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#111111d9",
+                });
+            }
 
         } catch (error) {
             console.log('error ao enviar dados pela rota /login.', error);
@@ -65,7 +75,6 @@ export const Login = ({ csrfToken }) => {
                 title="Login"
                 description="Agenda SyS, é um sistema de cadatros de contatos para serem visualizados como uma Agenda."
             />
-
             <S.Form>
                 <h2> Faça Login no Sistema </h2>
                 <form onSubmit={(e) => fetchLogin(e)}>
