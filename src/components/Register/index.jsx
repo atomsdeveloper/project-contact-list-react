@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 import P from "prop-types";
 
 // Helpers
-import Head from "../helpers/Head";
+import Head from "../_helpers/Head";
 import React from "react";
 
 export const Register = ({ csrfToken }) => {

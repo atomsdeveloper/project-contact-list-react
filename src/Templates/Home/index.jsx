@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import * as S from "./styles";
 
 // Helpers
-import Head from "../../components/helpers/Head";
+import Head from "../../components/_helpers/Head";
 
 // Animations CSS
 import AOS from "aos";
@@ -48,7 +48,7 @@ const Home = ({ contatos }) => {
         <p >Seus contatos estão abaixo</p>
         <span></span>
 
-        {console.log("Home: ", contatos)}
+        {/* {console.log("Home: ", contatos)} */}
         {contatos ? (
           <S.Table>
             {contatos.map((contato, index) => (
