@@ -1,51 +1,75 @@
-<% - include('includes/head'); %>
-<% - include('includes/nav'); %>
+import styled from "styled-components";
 
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-2"></div>
+export const Container = styled.div`
+  width: 100%;
+  height: calc(100vh - 60px);
 
-      <div class="col col-lg-8 my-5">
-        <h1 class="text-center"> Cadastro </h1>
-        <p class="text-center lead"> Faça um cadastro ou edite um contato. </p>
+  padding: 0.875rem;
 
-        <%- include('includes/msg'); %>
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
+export const Form = styled.div`
+  width: 370px;
+  height: 350px;
 
-        <% if(contato._id) { %>
-      <form class="form-cadastro" action="/contato/edit/<%= contato._id %>" method="post">
-        <% } else { %>
-        <form class="form-cadastro" action="/contato/register" method="post">
-          <% } %>
+  h2 {
+    font: var(--poppins-32);
+  }
 
-          <div class="form-group">
-            <label for="name">Nome</label>
-            <input type="text" name="name" value="<%= contato.name %>" class="form-control">
-          </div>
+  form {
+    width: 100%;
+    height: 100%;
 
-          <div class="form-group">
-            <label for="secondname">Sobrenome</label>
-            <input type="text" name="secondname" value="<%= contato.secondname %>" class="form-control">
-          </div>
+    gap: 0.875rem;
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    justify-content: center;
 
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" name="email" value="<%= contato.email %>" class="form-control">
-          </div>
+    .form-group {
+      width: 100%;
 
-          <div class="form-group">
-            <label for="tel">Telefone</label>
-            <input type="tel" name="tel" value="<%= contato.tel %>" class="form-control">
-          </div>
+      display: flex;
+      flex-direction: column;
 
-          <button type="submit" class="btn btn-primary"> Salvar </button>
-          <input type="hidden" name="_csrf" value=<%= csrfToken %>> <!-- Válidação e segurança de formulário -->
-        </form>
+      label {
+      }
 
-    </div>
+      input {
+        height: 40px;
 
-    <div class="col-lg-2"></div>
-  </div>
-    </div>
+        padding: 0.575rem;
 
-    <%- include('includes/footer'); %></div>
+        border: 1px solid var(--color-4);
+        border-radius: 4px;
+
+        &:focus {
+          outline: none;
+
+          border: 1px solid var(--color-p5);
+          transition: border 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        &::placeholder {
+          font-family: "Poppins", sans-serif;
+          font-size: 15px;
+        }
+      }
+    }
+
+    button {
+      width: 100px;
+      height: 35px;
+
+      font: var(--poppins-16);
+      color: var(--color-0);
+
+      border: none;
+      border-radius: 4px;
+      background: var(--color-p5);
+    }
+  }
+`;
