@@ -10,17 +10,17 @@ import { AuthProvider } from "./components/_context/authContext";
 import { NotFound } from "./components/NotFound";
 import { Header } from "./components/Header";
 import { Login } from "./components/Login";
-import { Register } from "./components/Register"
+import { Register } from "./components/Register";
+import { Contact } from "./components/Contact";
+import { Edit } from "./components/Edit";
 
 // Lazy Components
 const Home = React.lazy(() => import("./Templates/Home"));
 
 // Loading
 export const Loading = () => {
-  return (
-    <h1>Loading</h1>
-  )
-}
+  return <h1>Loading</h1>;
+};
 
 function App() {
   const [contatos, setContatos] = React.useState([]);
@@ -29,9 +29,9 @@ function App() {
   const fetchData = async () => {
     try {
       const response = await fetch("http://localhost:3000", {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         credentials: "include",
       });
@@ -42,10 +42,10 @@ function App() {
     } catch (error) {
       console.log("Error ao buscar dados de contatos e csrfToken.", error);
     }
-  }
+  };
   React.useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   return (
     <BrowserRouter>
@@ -54,14 +54,36 @@ function App() {
 
         <React.Suspense fallback={<Loading />}>
           <Routes>
-            <Route path="/" element={<Home contatos={contatos} />} />
+            <Route
+              path="/"
+              element={<Home contatos={contatos} csrfToken={csrfToken} />}
+            />
+
+            {/* Login */}
             <Route path="/login" element={<Login csrfToken={csrfToken} />} />
-            <Route path="/register" element={<Register csrfToken={csrfToken} />} />
-            <Route path="*" element={<NotFound text="Página não encontrada." />} />
+            <Route
+              path="/register"
+              element={<Register csrfToken={csrfToken} />}
+            />
+
+            {/* Contact */}
+            <Route
+              path="/contato"
+              element={<Contact csrfToken={csrfToken} />}
+            />
+            <Route
+              path="/contato/edit/:id"
+              element={<Edit csrfToken={csrfToken} />}
+            />
+
+            <Route
+              path="*"
+              element={<NotFound text="Página não encontrada." />}
+            />
           </Routes>
         </React.Suspense>
       </AuthProvider>
     </BrowserRouter>
-  )
+  );
 }
-export default App
+export default App;
