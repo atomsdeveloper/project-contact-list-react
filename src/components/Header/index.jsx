@@ -28,10 +28,11 @@ export const Header = () => {
         icon: "warning",
         confirmButtonText: "OK",
         confirmButtonColor: "#111111d9",
+      }).then(() => {
+        sessionStorage.removeItem("user");
+        setHasUser(null);
+        window.location.reload(); // Recarrega a página após o logout
       });
-      sessionStorage.removeItem("user");
-      setHasUser(null);
-      window.location.reload(); // Recarrega a página após o logout
     }
   };
 
@@ -43,7 +44,7 @@ export const Header = () => {
       <S.Nav>
         <ul>
           <li>
-            <Link to="/contato/index">Cadastrar contato</Link>
+            <Link to="/contato">Cadastrar contato</Link>
           </li>
           <li>
             <Link to="/register">Criar conta</Link>
