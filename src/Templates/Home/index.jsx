@@ -1,6 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+// Lib
+import Swal from "sweetalert2";
+
 // Syled Components
 import * as S from "./styles";
 
@@ -14,8 +17,7 @@ import "aos/dist/aos.css";
 // Types
 import P from "prop-types";
 
-const Home = ({ contatos }) => {
-
+const Home = ({ contatos, csrfToken }) => {
   React.useEffect(() => {
     AOS.init({
       duration: 2500,
@@ -26,15 +28,53 @@ const Home = ({ contatos }) => {
   const formatDate = (date) => {
     const newDate = new Date(date);
 
-    return new Intl.DateTimeFormat('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false
-    }).format(newDate)
-  }
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(newDate);
+  };
+
+  const handleDelete = async (id) => {
+    const response = await fetch(`http://localhost:3000/contato/delete/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken,
+      },
+    });
+
+    const data = await response.json();
+    console.log(data);
+
+    if (!data.success) {
+      Swal.fire({
+        title: "Aviso!",
+        text: `${data.message}`,
+        icon: "warning",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#111111d9",
+      }).then(() => {
+        window.location.reload(); // Recarrega a página após o delete
+      });
+    }
+
+    if (data.success) {
+      Swal.fire({
+        title: "Sucesso!",
+        text: `${data.message}`,
+        icon: "success",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#111111d9",
+      }).then(() => {
+        window.location.reload(); // Recarrega a página após o delete
+      });
+    }
+  };
 
   return (
     <S.Content>
@@ -45,7 +85,7 @@ const Home = ({ contatos }) => {
 
       <S.Contacts>
         <h1>Agenda</h1>
-        <p >Seus contatos estão abaixo</p>
+        <p>Seus contatos estão abaixo</p>
         <span></span>
 
         {/* {console.log("Home: ", contatos)} */}
@@ -60,16 +100,15 @@ const Home = ({ contatos }) => {
                   <td>{formatDate(contato.created)}</td>
                   <td>
                     <button id="edit">
-                      <Link to={`/contato/index/${contato._id}`}>
-                        Editar
-                      </Link>
+                      <Link to={`/contato/edit/${contato._id}`}>Editar</Link>
                     </button>
                   </td>
                   <td>
-                    <button id="delete">
-                      <Link to={`/contato/delete/${contato._id}`}>
-                        Excluir
-                      </Link>
+                    <button
+                      id="delete"
+                      onClick={() => handleDelete(contato._id)}
+                    >
+                      <Link to="/">Excluir</Link>
                     </button>
                   </td>
                 </tr>
@@ -83,7 +122,7 @@ const Home = ({ contatos }) => {
     </S.Content>
   );
 };
-Home.PropTypes = {
+Home.propTypes = {
   contatos: P.arrayOf(
     P.shape({
       name: P.string.isRequired,
@@ -91,7 +130,8 @@ Home.PropTypes = {
       email: P.string.isRequired,
       created: P.string.isRequired,
     })
-  ).isRequired
-}
+  ).isRequired,
+  csrfToken: P.string.isRequired,
+};
 
 export default Home;
