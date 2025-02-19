@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
   const [hasUser, setHasUser] = React.useState(() => {
     // Inicializa com o valor do sessionStorage
     const user = sessionStorage.getItem("user");
-    console.log("Context: ", user);
     return user ? JSON.parse(user) : null;
   });
 
