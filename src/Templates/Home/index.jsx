@@ -43,14 +43,17 @@ const Home = () => {
   };
 
   const handleDelete = async (id) => {
-    const response = await fetch(`http://localhost:3000/contato/delete/${id}`, {
-      method: "DELETE",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": csrfToken,
-      },
-    });
+    const response = await fetch(
+      `https://project-contact-list-node-production.up.railway.app/contato/delete/${id}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+        },
+      }
+    );
 
     const data = await response.json();
     console.log(data);

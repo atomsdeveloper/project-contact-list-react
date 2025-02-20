@@ -30,7 +30,7 @@ export const Edit = () => {
   const fetchBuscarId = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/contato/index/${id}`,
+        `https://project-contact-list-node-production.up.railway.app/contato/index/${id}`,
         {
           method: "GET",
           headers: {
@@ -81,15 +81,18 @@ export const Edit = () => {
     e.preventDefault(); // Evita recarregar a página
 
     try {
-      const response = await fetch(`http://localhost:3000/contato/edit/${id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken,
-        },
-        credentials: "include",
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `https://project-contact-list-node-production.up.railway.app/contato/edit/${id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken,
+          },
+          credentials: "include",
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await response.json();
 

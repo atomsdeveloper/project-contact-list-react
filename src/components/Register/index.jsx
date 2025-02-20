@@ -29,15 +29,18 @@ export const Register = () => {
     const password = data.get("password");
 
     try {
-      const response = await fetch("http://localhost:3000/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken, // Enviando o token no cabeçalho
-        },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        "https://project-contact-list-node-production.up.railway.app/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken, // Enviando o token no cabeçalho
+          },
+          credentials: "include",
+          body: JSON.stringify({ email, password }),
+        }
+      );
       const data = await response.json();
 
       if (!data.errors) {
