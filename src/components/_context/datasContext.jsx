@@ -10,13 +10,16 @@ export const ContactProvider = ({ children }) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:3000", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://project-contact-list-node-production.up.railway.app",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
       const datas = await response.json();
 
       setContatos(datas.contatos);
