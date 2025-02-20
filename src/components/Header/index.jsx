@@ -14,11 +14,14 @@ export const Header = () => {
   const { hasUser, setHasUser } = useAuthContext();
 
   const handleLogout = async () => {
-    const response = await fetch("http://localhost:3000/logout", {
-      method: "GET",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      "https://project-contact-list-node-production.up.railway.app/logout",
+      {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();

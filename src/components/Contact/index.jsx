@@ -31,15 +31,18 @@ export const Contact = () => {
     const tel = data.get("tel");
 
     try {
-      const response = await fetch("http://localhost:3000/contato/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken,
-        },
-        credentials: "include",
-        body: JSON.stringify({ name, secondname, email, tel }),
-      });
+      const response = await fetch(
+        "https://project-contact-list-node-production.up.railway.app/contato/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken,
+          },
+          credentials: "include",
+          body: JSON.stringify({ name, secondname, email, tel }),
+        }
+      );
       const data = await response.json();
 
       if (!data.success) {
