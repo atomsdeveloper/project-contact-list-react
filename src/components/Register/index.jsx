@@ -1,18 +1,23 @@
+import React from "react";
+
 // Syled Components
 import * as S from "./styles";
 
+// Context
+import { ContactContext } from "../_context/datasContext";
+
 // Hooks
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 
-// Types
-import P from "prop-types";
+// Hooks
+import Swal from "sweetalert2";
 
 // Helpers
 import Head from "../_helpers/Head";
 
-export const Register = ({ csrfToken }) => {
+export const Register = () => {
   const navigate = useNavigate();
+  const { csrfToken } = React.useContext(ContactContext); // Usa o contexto
 
   const fetchRegister = async (e) => {
     e.preventDefault();
@@ -85,7 +90,4 @@ export const Register = ({ csrfToken }) => {
       </S.Form>
     </S.Container>
   );
-};
-Register.propTypes = {
-  csrfToken: P.string.isRequired,
 };

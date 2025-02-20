@@ -1,5 +1,8 @@
 import React from "react";
 
+// Context
+import { ContactContext } from "../_context/datasContext";
+
 // Syled Components
 import * as S from "./styles";
 
@@ -7,15 +10,13 @@ import * as S from "./styles";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-// Types
-import P from "prop-types";
-
 // Helpers
 import Head from "../_helpers/Head";
 import { useAuthContext } from "../_context/authContext";
 
-export const Login = ({ csrfToken }) => {
+export const Login = () => {
   const { setHasUser } = useAuthContext();
+  const { csrfToken } = React.useContext(ContactContext); // Usa o contexto
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -103,7 +104,4 @@ export const Login = ({ csrfToken }) => {
       </S.Form>
     </S.Container>
   );
-};
-Login.propTypes = {
-  csrfToken: P.string.isRequired,
 };

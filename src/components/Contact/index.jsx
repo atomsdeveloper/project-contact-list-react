@@ -1,6 +1,10 @@
 import * as S from "./styles";
 
+import React from "react";
 import Head from "../_helpers/Head";
+
+// Context
+import { ContactContext } from "../_context/datasContext"; // Importa o contexto
 
 // Lib
 import Swal from "sweetalert2";
@@ -11,8 +15,9 @@ import { useNavigate } from "react-router-dom";
 // Types
 import P from "prop-types";
 
-export const Contact = ({ csrfToken }) => {
+export const Contact = () => {
   const navigate = useNavigate();
+  const { fetchData, csrfToken } = React.useContext(ContactContext); // Usa o contexto
 
   const fetchRegisterContact = async (e) => {
     e.preventDefault();
@@ -54,7 +59,7 @@ export const Contact = ({ csrfToken }) => {
           confirmButtonColor: "#111111d9",
         });
       }
-
+      fetchData();
       navigate("/");
     } catch (error) {
       console.log("error ao enviar dados pela rota /login.", error);

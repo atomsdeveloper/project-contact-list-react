@@ -10,6 +10,9 @@ import * as S from "./styles";
 // Helpers
 import Head from "../../components/_helpers/Head";
 
+// Context
+import { ContactContext } from "../../components/_context/datasContext"; // Importa o contexto
+
 // Animations CSS
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -17,7 +20,8 @@ import "aos/dist/aos.css";
 // Types
 import P from "prop-types";
 
-const Home = ({ contatos, csrfToken }) => {
+const Home = () => {
+  const { contatos, csrfToken } = React.useContext(ContactContext); // Usa o contexto
   React.useEffect(() => {
     AOS.init({
       duration: 2500,
@@ -131,7 +135,6 @@ Home.propTypes = {
       created: P.string.isRequired,
     })
   ).isRequired,
-  csrfToken: P.string.isRequired,
 };
 
 export default Home;
