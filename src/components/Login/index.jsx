@@ -18,6 +18,8 @@ export const Login = () => {
   const { setHasUser } = useAuthContext();
   const { csrfToken } = React.useContext(ContactContext); // Usa o contexto
   const navigate = useNavigate();
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
   React.useEffect(() => {
     const user = JSON.parse(sessionStorage.getItem("user"));
@@ -26,12 +28,6 @@ export const Login = () => {
 
   const fetchLogin = async (e) => {
     e.preventDefault();
-
-    const form = e.target;
-    const data = new FormData(form);
-
-    const email = data.get("email");
-    const password = data.get("password");
 
     try {
       const response = await fetch(
@@ -93,16 +89,29 @@ export const Login = () => {
         <form onSubmit={(e) => fetchLogin(e)}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input type="email" name="email" />
+            <input
+              type="email"
+              name="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
 
           <div className="form-group">
             <label htmlFor="password">Senha</label>
-            <input type="password" name="password" />
+            <input
+              type="password"
+              name="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
-
           <button type="submit">Entrar</button>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          {/* <input type="hidden" name="_csrf" value={csrfToken} /> */}
         </form>
       </S.Form>
     </S.Container>
