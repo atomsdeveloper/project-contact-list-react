@@ -84,49 +84,55 @@ const Home = () => {
   };
 
   return (
-    <S.Content>
+    <>
       <Head
         title="Home"
         description="Agenda SyS, é um sistema de cadatros de contatos para serem visualizados como uma Agenda."
       />
 
-      <S.Contacts>
-        <h1>Agenda</h1>
-        <p>Seus contatos estão abaixo</p>
-        <span></span>
-
-        {/* {console.log("Home: ", contatos)} */}
-        {contatos ? (
-          <S.Table>
-            {contatos.map((contato, index) => (
-              <tbody key={index}>
+      <S.ContainerHome>
+        <S.ContainerTable>
+          {contatos ? (
+            <S.Table>
+              <thead>
                 <tr>
-                  <td>{contato.name}</td>
-                  <td>{contato.tel}</td>
-                  <td>{contato.email}</td>
-                  <td>{formatDate(contato.created)}</td>
-                  <td>
-                    <button id="edit">
-                      <Link to={`/contato/edit/${contato._id}`}>Editar</Link>
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      id="delete"
-                      onClick={() => handleDelete(contato._id)}
-                    >
-                      <Link to="/">Excluir</Link>
-                    </button>
-                  </td>
+                  <th>Nome</th>
+                  <th>Celular</th>
+                  <th>E-mail</th>
+                  <th>Data</th>
+                  <th>Ação</th>
                 </tr>
-              </tbody>
-            ))}
-          </S.Table>
-        ) : (
-          <p>Não existem contatos na sua agenda.</p>
-        )}
-      </S.Contacts>
-    </S.Content>
+              </thead>
+              {contatos.map((contato, index) => (
+                <tbody key={index}>
+                  <tr>
+                    <td>{contato.name}</td>
+                    <td>{contato.tel}</td>
+                    <td>{contato.email}</td>
+                    <td>{formatDate(contato.created)}</td>
+                    <td>
+                      <button id="edit">
+                        <Link to={`/contato/edit/${contato._id}`}>Editar</Link>
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        id="delete"
+                        onClick={() => handleDelete(contato._id)}
+                      >
+                        <Link to="/">Excluir</Link>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              ))}
+            </S.Table>
+          ) : (
+            <p>Não existem contatos na sua agenda.</p>
+          )}
+        </S.ContainerTable>
+      </S.ContainerHome>
+    </>
   );
 };
 Home.propTypes = {
