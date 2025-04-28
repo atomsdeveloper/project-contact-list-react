@@ -1,66 +1,52 @@
 import styled from "styled-components";
 
-export const Content = styled.main`
-    height: calc(100vh - 60px);
+export const ContainerHome = styled.div`
+  width: 100%;
 
-    display: flex;
-    justify-content: center;
+  display: flex;
 `;
 
-export const Contacts = styled.section`
-    width: 700px;
-    height: 100%;
+export const ContainerTable = styled.section`
+  margin: 0 auto;
 
-    gap: .575rem;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-
-    padding: .575rem;
-
-    h1 {
-        font: var(--poppins-32);
-    }
-
-    p {
-        font: var(--poppins-16);
-    }
-
-    span {
-        width: 80%;
-
-        border: 1px solid #ebe8e8;
-    }
+  margin-top: 2rem;
+  overflow-x: auto;
+  border-radius: 8px;
 `;
 
 export const Table = styled.table`
-    width: 100%;
+  min-width: 750px;
+  border-collapse: collapse;
 
-    tr > td > button {
-        border: none;
-        border-radius: 4px;
+  th,
+  td {
+    text-align: left;
+    padding: 0.725rem;
+  }
 
-        padding: .425rem;
+  tbody > tr > td > button {
+    border: none;
+  }
+
+  tr > td > #edit {
+    background: var(--color-p5);
+
+    &:hover {
+      background: var(--color-p6);
     }
+  }
 
-    tr > td > #edit {
-        background: var(--color-p5);
+  tr > td > #delete {
+    background: var(--color-13);
 
-        &:hover {
-            background: var(--color-p6);
-        }
+    &:hover {
+      background: var(--color-12);
     }
+  }
 
-    tr > td > #delete {
-        background: var(--color-13);
-
-        &:hover {
-            background: var(--color-12);
-        }
-    }
-
-    tr > td > button > a {
-        font: var(--poppins-12);
-        color: var(--color-0)
-    }
+  tbody > tr > td > button > a {
+    font: var(--poppins-12);
+    color: var(--color-0);
+    padding: 0px 15px;
+  }
 `;
