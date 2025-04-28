@@ -47,7 +47,7 @@ export const Header = () => {
       <S.Nav>
         <ul>
           <li>
-            <Link to="/contato">Cadastrar contato</Link>
+            <Link to="/contato">Cadastrar</Link>
           </li>
           <li>
             <Link to="/register">Criar conta</Link>
