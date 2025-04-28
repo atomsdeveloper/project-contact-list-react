@@ -18,19 +18,15 @@ import Head from "../_helpers/Head";
 export const Register = () => {
   const navigate = useNavigate();
   const { csrfToken } = React.useContext(ContactContext); // Usa o contexto
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
   const fetchRegister = async (e) => {
     e.preventDefault();
 
-    const form = e.target;
-    const data = new FormData(form);
-
-    const email = data.get("email");
-    const password = data.get("password");
-
     try {
       const response = await fetch(
-        "https://project-contact-list-node-production.up.railway.app/register",
+        "https://project-contact-list-node-production.up.railway.app/registro",
         {
           method: "POST",
           headers: {
@@ -42,6 +38,7 @@ export const Register = () => {
         }
       );
       const data = await response.json();
+      console.log("FormRegister:", data);
 
       if (!data.errors) {
         Swal.fire({
@@ -79,16 +76,30 @@ export const Register = () => {
         <form onSubmit={(e) => fetchRegister(e)}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input type="email" name="email" />
+            <input
+              type="email"
+              name="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
 
           <div className="form-group">
             <label htmlFor="password">Senha</label>
-            <input type="password" name="password" />
+            <input
+              type="password"
+              name="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
 
           <button type="submit">Cadastrar</button>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          {/* <input type="hidden" name="_csrf" value={csrfToken} />; */}
         </form>
       </S.Form>
     </S.Container>
