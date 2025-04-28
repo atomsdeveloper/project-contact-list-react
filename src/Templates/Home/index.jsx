@@ -12,6 +12,7 @@ import Head from "../../components/_helpers/Head";
 
 // Context
 import { ContactContext } from "../../components/_context/datasContext"; // Importa o contexto
+import { useAuthContext } from "../../components/_context/authContext";
 
 // Animations CSS
 import AOS from "aos";
@@ -21,6 +22,8 @@ import "aos/dist/aos.css";
 import P from "prop-types";
 
 const Home = () => {
+  const { hasUser } = useAuthContext();
+
   const { contatos, csrfToken } = React.useContext(ContactContext); // Usa o contexto
   React.useEffect(() => {
     AOS.init({
@@ -100,7 +103,7 @@ const Home = () => {
                   <th>Celular</th>
                   <th>E-mail</th>
                   <th>Data</th>
-                  <th>Ação</th>
+                  {hasUser ? <th>Ação</th> : ""}
                 </tr>
               </thead>
               {contatos.map((contato, index) => (
@@ -110,19 +113,27 @@ const Home = () => {
                     <td>{contato.tel}</td>
                     <td>{contato.email}</td>
                     <td>{formatDate(contato.created)}</td>
-                    <td>
-                      <button id="edit">
-                        <Link to={`/contato/edit/${contato._id}`}>Editar</Link>
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        id="delete"
-                        onClick={() => handleDelete(contato._id)}
-                      >
-                        <Link to="/">Excluir</Link>
-                      </button>
-                    </td>
+                    {hasUser ? (
+                      <>
+                        <td>
+                          <button id="edit">
+                            <Link to={`/contato/edit/${contato._id}`}>
+                              Editar
+                            </Link>
+                          </button>
+                        </td>
+                        <td>
+                          <button
+                            id="delete"
+                            onClick={() => handleDelete(contato._id)}
+                          >
+                            <Link to="/">Excluir</Link>
+                          </button>
+                        </td>
+                      </>
+                    ) : (
+                      ""
+                    )}
                   </tr>
                 </tbody>
               ))}
