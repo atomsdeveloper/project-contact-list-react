@@ -26,7 +26,7 @@ export const Register = () => {
 
     try {
       const response = await fetch(
-        "https://project-contact-list-node-production.up.railway.app/register",
+        "https://project-contact-list-node-production.up.railway.app/registro",
         {
           method: "POST",
           headers: {
@@ -38,6 +38,7 @@ export const Register = () => {
         }
       );
       const data = await response.json();
+      console.log("FormRegister:", data);
 
       if (!data.errors) {
         Swal.fire({
