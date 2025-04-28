@@ -46,9 +46,13 @@ export const Header = () => {
       </S.Title>
       <S.Nav>
         <ul>
-          <li>
-            <Link to="/contato">Cadastrar</Link>
-          </li>
+          {!hasUser ? (
+            ""
+          ) : (
+            <li>
+              <Link to="/contato">Cadastrar</Link>
+            </li>
+          )}
           <li>
             <Link to="/register">Criar conta</Link>
           </li>
