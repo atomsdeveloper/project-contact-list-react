@@ -25,9 +25,9 @@ export const Loading = () => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <ContactProvider>
+    <ContactProvider>
+      <BrowserRouter>
+        <AuthProvider>
           <Header />
 
           <React.Suspense fallback={<Loading />}>
@@ -48,9 +48,9 @@ function App() {
               />
             </Routes>
           </React.Suspense>
-        </ContactProvider>
-      </AuthProvider>
-    </BrowserRouter>
+        </AuthProvider>
+      </BrowserRouter>
+    </ContactProvider>
   );
 }
 export default App;
