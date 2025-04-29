@@ -1,8 +1,5 @@
 import React from "react";
 
-// Context
-import { ContactContext } from "../_context/datasContext";
-
 // Syled Components
 import * as S from "./styles";
 
@@ -12,14 +9,17 @@ import Swal from "sweetalert2";
 
 // Helpers
 import Head from "../_helpers/Head";
+
+// Context
 import { useAuthContext } from "../_context/authContext";
+import { ContactContext } from "../_context/datasContext";
 
 export const Login = () => {
   const { setHasUser } = useAuthContext();
-  const { csrfToken } = React.useContext(ContactContext); // Usa o contexto
-  const navigate = useNavigate();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const { data } = React.useContext(ContactContext); // Usa o contexto
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const user = JSON.parse(sessionStorage.getItem("user"));
@@ -29,20 +29,24 @@ export const Login = () => {
   const fetchLogin = async (e) => {
     e.preventDefault();
 
+    const csrfToken = localStorage.getItem("csrfToken");
     try {
-      const response = await fetch(
-        "https://project-contact-list-node-production.up.railway.app/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": csrfToken,
-          },
-          credentials: "include",
-          body: JSON.stringify({ email, password }),
-        }
-      );
-      const data = await response.json();
+      if (data.csrfToken === csrfToken) {
+        const response = await fetch(
+          "https://project-contact-list-node-production.up.railway.app/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-Token": csrfToken,
+            },
+            credentials: "include",
+            body: JSON.stringify({ email, password }),
+          }
+        );
+        const data = await response.json();
+        return data;
+      }
 
       if (data.auth) {
         sessionStorage.setItem("user", JSON.stringify(data.auth));
