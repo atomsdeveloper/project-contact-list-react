@@ -3,9 +3,6 @@ import React from "react";
 // Syled Components
 import * as S from "./styles";
 
-// Context
-import { ContactContext } from "../_context/datasContext";
-
 // Hooks
 import { useNavigate } from "react-router-dom";
 
@@ -15,30 +12,34 @@ import Swal from "sweetalert2";
 // Helpers
 import Head from "../_helpers/Head";
 
+// Context
+import { ContactContext } from "../_context/datasContext";
+
 export const Register = () => {
   const navigate = useNavigate();
-  const { csrfToken } = React.useContext(ContactContext); // Usa o contexto
+  const { data } = React.useContext(ContactContext); // Usa o contexto
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const fetchRegister = async (e) => {
-    e.preventDefault();
-
+  const fetchRegister = async () => {
+    const csrfToken = localStorage.getItem("csrfToken");
     try {
-      const response = await fetch(
-        "https://project-contact-list-node-production.up.railway.app/registro",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": csrfToken, // Enviando o token no cabeçalho
-          },
-          credentials: "include",
-          body: JSON.stringify({ email, password }),
-        }
-      );
-      const data = await response.json();
-      console.log("FormRegister:", data);
+      if (data.csrfToken === csrfToken) {
+        const response = await fetch(
+          "https://project-contact-list-node-production.up.railway.app/registro",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-Token": csrfToken, // Enviando o token no cabeçalho
+            },
+            // credentials: "include",
+            body: JSON.stringify({ email, password }),
+          }
+        );
+        const data = await response.json();
+        return data;
+      }
 
       if (!data.errors) {
         Swal.fire({
@@ -73,7 +74,7 @@ export const Register = () => {
 
       <S.Form>
         <h2> Faça cadastro de um usuário no sistema. </h2>
-        <form onSubmit={(e) => fetchRegister(e)}>
+        <form>
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -98,7 +99,9 @@ export const Register = () => {
             />
           </div>
 
-          <button type="submit">Cadastrar</button>
+          <button type="button" onClick={fetchRegister}>
+            Cadastrar
+          </button>
           {/* <input type="hidden" name="_csrf" value={csrfToken} />; */}
         </form>
       </S.Form>

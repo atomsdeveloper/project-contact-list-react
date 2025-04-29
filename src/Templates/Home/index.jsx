@@ -24,7 +24,7 @@ import P from "prop-types";
 const Home = () => {
   const { hasUser } = useAuthContext();
 
-  const { contatos, csrfToken } = React.useContext(ContactContext); // Usa o contexto
+  const { data } = React.useContext(ContactContext); // Usa o contexto
   React.useEffect(() => {
     AOS.init({
       duration: 2500,
@@ -53,7 +53,7 @@ const Home = () => {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken,
+          "X-CSRF-Token": data.csrfToken,
         },
       }
     );
@@ -95,7 +95,7 @@ const Home = () => {
 
       <S.ContainerHome>
         <S.ContainerTable>
-          {contatos ? (
+          {data.contatos ? (
             <S.Table>
               <thead>
                 <tr>
@@ -106,7 +106,7 @@ const Home = () => {
                   {hasUser ? <th>Ação</th> : ""}
                 </tr>
               </thead>
-              {contatos.map((contato, index) => (
+              {data.contatos.map((contato, index) => (
                 <tbody key={index}>
                   <tr>
                     <td>{contato.name}</td>
