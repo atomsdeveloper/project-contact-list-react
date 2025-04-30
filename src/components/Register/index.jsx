@@ -3,9 +3,6 @@ import React from "react";
 // Syled Components
 import * as S from "./styles";
 
-// Context
-import { ContactContext } from "../_context/datasContext";
-
 // Hooks
 import { useNavigate } from "react-router-dom";
 
@@ -15,35 +12,44 @@ import Swal from "sweetalert2";
 // Helpers
 import Head from "../_helpers/Head";
 
+// Context
+import { ContactContext } from "../_context/datasContext";
+
 export const Register = () => {
   const navigate = useNavigate();
-  const { csrfToken } = React.useContext(ContactContext); // Usa o contexto
+
+  const { data, loading } = React.useContext(ContactContext);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const fetchRegister = async (e) => {
+  const handleFetchRegister = async (e) => {
     e.preventDefault();
+
+    if (loading) {
+      console.warn("Ainda carregando dados. Aguarde...");
+      return;
+    }
 
     try {
       const response = await fetch(
-        "https://project-contact-list-node-production.up.railway.app/registro",
+        "https://project-contact-list-node-production.up.railway.app/register",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-CSRF-Token": csrfToken, // Enviando o token no cabeçalho
+            "X-CSRF-Token": data.csrfToken, // Enviando o token no cabeçalho
           },
-          credentials: "include",
           body: JSON.stringify({ email, password }),
+          credentials: "include",
         }
       );
-      const data = await response.json();
-      console.log("FormRegister:", data);
+      const { errors, message } = await response.json();
+      console.log("/registro", errors, message);
 
-      if (!data.errors) {
+      if (!errors || message) {
         Swal.fire({
           title: "Sucesso!",
-          text: `${data.success[0]}`,
+          text: `${JSON.stringify(message)}`,
           icon: "success",
           confirmButtonText: "OK",
           confirmButtonColor: "#111111d9",
@@ -51,10 +57,10 @@ export const Register = () => {
         navigate("/");
       }
 
-      data.errors &&
+      errors &&
         Swal.fire({
           title: "Error!",
-          text: `${data.errors[0]}`,
+          text: `${JSON.stringify(message)}`,
           icon: "error",
           confirmButtonText: "OK",
           confirmButtonColor: "#111111d9",
@@ -71,37 +77,38 @@ export const Register = () => {
         description="Agenda SyS, é um sistema de cadatros de contatos para serem visualizados como uma Agenda."
       />
 
-      <S.Form>
-        <h2> Faça cadastro de um usuário no sistema. </h2>
-        <form onSubmit={(e) => fetchRegister(e)}>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              name="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Senha</label>
-            <input
-              type="password"
-              name="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <button type="submit">Cadastrar</button>
-          {/* <input type="hidden" name="_csrf" value={csrfToken} />; */}
-        </form>
-      </S.Form>
+      {loading ? (
+        <p>Carregando token de segurança...</p>
+      ) : (
+        <S.Form>
+          <h2> Faça cadastro de um usuário no sistema. </h2>
+          <form onSubmit={(e) => handleFetchRegister(e)}>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                name="email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Senha</label>
+              <input
+                type="password"
+                name="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit">Cadastrar</button>
+          </form>
+        </S.Form>
+      )}
     </S.Container>
   );
 };

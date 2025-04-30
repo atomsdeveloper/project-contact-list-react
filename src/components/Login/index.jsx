@@ -1,8 +1,5 @@
 import React from "react";
 
-// Context
-import { ContactContext } from "../_context/datasContext";
-
 // Syled Components
 import * as S from "./styles";
 
@@ -12,22 +9,23 @@ import Swal from "sweetalert2";
 
 // Helpers
 import Head from "../_helpers/Head";
+
+// Context
 import { useAuthContext } from "../_context/authContext";
 
 export const Login = () => {
   const { setHasUser } = useAuthContext();
-  const { csrfToken } = React.useContext(ContactContext); // Usa o contexto
-  const navigate = useNavigate();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const user = JSON.parse(sessionStorage.getItem("user"));
     user ? setHasUser(user) : "";
   }, [setHasUser]);
 
-  const fetchLogin = async (e) => {
-    e.preventDefault();
+  const fetchLogin = async () => {
+    const csrfToken = localStorage.getItem("csrfToken");
 
     try {
       const response = await fetch(
@@ -38,8 +36,8 @@ export const Login = () => {
             "Content-Type": "application/json",
             "X-CSRF-Token": csrfToken,
           },
-          credentials: "include",
           body: JSON.stringify({ email, password }),
+          credentials: "include",
         }
       );
       const data = await response.json();
@@ -54,7 +52,7 @@ export const Login = () => {
       if (!data.errors) {
         Swal.fire({
           title: "Sucesso!",
-          text: `${data.success[0]}`,
+          text: `${JSON.stringify(data.message)}`,
           icon: "success",
           confirmButtonText: "OK",
           confirmButtonColor: "#111111d9",
@@ -67,7 +65,7 @@ export const Login = () => {
         data.errors &&
           Swal.fire({
             title: "Error!",
-            text: `${data.errors[0]}`,
+            text: `${JSON.stringify(data.message)}`,
             icon: "error",
             confirmButtonText: "OK",
             confirmButtonColor: "#111111d9",
@@ -86,7 +84,7 @@ export const Login = () => {
       />
       <S.Form>
         <h2> Faça Login no Sistema </h2>
-        <form onSubmit={(e) => fetchLogin(e)}>
+        <form>
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -110,8 +108,9 @@ export const Login = () => {
               required
             />
           </div>
-          <button type="submit">Entrar</button>
-          {/* <input type="hidden" name="_csrf" value={csrfToken} /> */}
+          <button type="button" onClick={fetchLogin}>
+            Entrar
+          </button>
         </form>
       </S.Form>
     </S.Container>
