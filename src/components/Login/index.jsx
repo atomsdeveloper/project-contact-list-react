@@ -12,16 +12,11 @@ import Head from "../_helpers/Head";
 
 // Context
 import { useAuthContext } from "../_context/authContext";
-import { ContactContext } from "../_context/datasContext";
 
 export const Login = () => {
   const { setHasUser } = useAuthContext();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-<<<<<<< HEAD
-=======
-  const { data } = React.useContext(ContactContext); // Usa o contexto
->>>>>>> 51876bba384618a085a32e3b1d58f02f04035be1
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -32,9 +27,7 @@ export const Login = () => {
   const fetchLogin = async () => {
     const csrfToken = localStorage.getItem("csrfToken");
 
-    const csrfToken = localStorage.getItem("csrfToken");
     try {
-<<<<<<< HEAD
       const response = await fetch(
         "https://project-contact-list-node-production.up.railway.app/login",
         {
@@ -48,24 +41,6 @@ export const Login = () => {
         }
       );
       const data = await response.json();
-=======
-      if (data.csrfToken === csrfToken) {
-        const response = await fetch(
-          "https://project-contact-list-node-production.up.railway.app/login",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRF-Token": csrfToken,
-            },
-            credentials: "include",
-            body: JSON.stringify({ email, password }),
-          }
-        );
-        const data = await response.json();
-        return data;
-      }
->>>>>>> 51876bba384618a085a32e3b1d58f02f04035be1
 
       if (data.auth) {
         sessionStorage.setItem("user", JSON.stringify(data.auth));

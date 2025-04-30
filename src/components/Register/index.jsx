@@ -17,7 +17,6 @@ import { ContactContext } from "../_context/datasContext";
 
 export const Register = () => {
   const navigate = useNavigate();
-<<<<<<< HEAD
 
   const { data, loading } = React.useContext(ContactContext);
   const [email, setEmail] = React.useState("");
@@ -45,32 +44,7 @@ export const Register = () => {
         }
       );
       const { errors, message } = await response.json();
-      console.log("/registro", errors, message);
-=======
-  const { data } = React.useContext(ContactContext); // Usa o contexto
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-
-  const fetchRegister = async () => {
-    const csrfToken = localStorage.getItem("csrfToken");
-    try {
-      if (data.csrfToken === csrfToken) {
-        const response = await fetch(
-          "https://project-contact-list-node-production.up.railway.app/registro",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRF-Token": csrfToken, // Enviando o token no cabeçalho
-            },
-            // credentials: "include",
-            body: JSON.stringify({ email, password }),
-          }
-        );
-        const data = await response.json();
-        return data;
-      }
->>>>>>> 51876bba384618a085a32e3b1d58f02f04035be1
+      console.log("/registro", errors);
 
       if (!errors || message) {
         Swal.fire({
@@ -103,7 +77,6 @@ export const Register = () => {
         description="Agenda SyS, é um sistema de cadatros de contatos para serem visualizados como uma Agenda."
       />
 
-<<<<<<< HEAD
       {loading ? (
         <p>Carregando token de segurança...</p>
       ) : (
@@ -133,44 +106,10 @@ export const Register = () => {
               />
             </div>
             <button type="submit">Cadastrar</button>
+            {/* <input type="hidden" name="_csrf" value={csrfToken} /> */}
           </form>
         </S.Form>
       )}
-=======
-      <S.Form>
-        <h2> Faça cadastro de um usuário no sistema. </h2>
-        <form>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              name="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Senha</label>
-            <input
-              type="password"
-              name="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <button type="button" onClick={fetchRegister}>
-            Cadastrar
-          </button>
-          {/* <input type="hidden" name="_csrf" value={csrfToken} />; */}
-        </form>
-      </S.Form>
->>>>>>> 51876bba384618a085a32e3b1d58f02f04035be1
     </S.Container>
   );
 };
