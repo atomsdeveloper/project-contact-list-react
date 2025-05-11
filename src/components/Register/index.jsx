@@ -34,7 +34,7 @@ export const Register = () => {
     }
 
     try {
-      const response = await fetch(`${URL}/contact/register`, {
+      const response = await fetch(`${URL}/register/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,8 +44,6 @@ export const Register = () => {
         credentials: "include",
       });
       const { errors, message } = await response.json();
-      console.log("/registro", errors);
-
       if (!errors || message) {
         Swal.fire({
           title: "Sucesso!",

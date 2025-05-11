@@ -34,7 +34,7 @@ export const Contact = () => {
     const tel = data.get("tel");
 
     try {
-      const response = await fetch(`${URL}/contato/register`, {
+      const response = await fetch(`${URL}/contact/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
