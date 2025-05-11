@@ -47,7 +47,7 @@ export const Contact = () => {
       if (!data.success) {
         Swal.fire({
           title: "Error!",
-          text: `${data.message}`,
+          text: `${data.errors.map((err) => err)}`,
           icon: "error",
           confirmButtonText: "OK",
           confirmButtonColor: "#111111d9",
