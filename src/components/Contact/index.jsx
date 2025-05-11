@@ -45,7 +45,7 @@ export const Contact = () => {
       const data = await response.json();
 
       if (!data.success) {
-        data.errors.map((error) => toast.warn(error));
+        data.errors.map(() => toast.error(data.message));
       } else {
         toast.success(data.message);
       }
