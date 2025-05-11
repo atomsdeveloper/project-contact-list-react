@@ -15,6 +15,9 @@ import Head from "../_helpers/Head";
 // Context
 import { ContactContext } from "../_context/datasContext";
 
+// Url
+import { URL } from "../../services/urlConfig";
+
 export const Register = () => {
   const navigate = useNavigate();
 
@@ -31,18 +34,15 @@ export const Register = () => {
     }
 
     try {
-      const response = await fetch(
-        "https://project-contact-list-node-production.up.railway.app/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": data.csrfToken, // Enviando o token no cabeçalho
-          },
-          body: JSON.stringify({ email, password }),
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${URL}/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": data.csrfToken, // Enviando o token no cabeçalho
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
       const { errors, message } = await response.json();
       console.log("/registro", errors);
 

@@ -13,6 +13,9 @@ import Head from "../_helpers/Head";
 // Context
 import { useAuthContext } from "../_context/authContext";
 
+// Url
+import { URL } from "../../services/urlConfig";
+
 export const Login = () => {
   const { setHasUser } = useAuthContext();
   const [email, setEmail] = React.useState("");
@@ -28,18 +31,15 @@ export const Login = () => {
     const csrfToken = localStorage.getItem("csrfToken");
 
     try {
-      const response = await fetch(
-        "https://project-contact-list-node-production.up.railway.app/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": csrfToken,
-          },
-          body: JSON.stringify({ email, password }),
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
       const data = await response.json();
 
       if (data.auth) {

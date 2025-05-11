@@ -15,6 +15,9 @@ import { useNavigate } from "react-router-dom";
 // Types
 import P from "prop-types";
 
+// Url
+import { URL } from "../../services/urlConfig";
+
 export const Contact = () => {
   const navigate = useNavigate();
   const { fetchData, csrfToken } = React.useContext(ContactContext); // Usa o contexto
@@ -31,18 +34,15 @@ export const Contact = () => {
     const tel = data.get("tel");
 
     try {
-      const response = await fetch(
-        "https://project-contact-list-node-production.up.railway.app/contato/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": csrfToken,
-          },
-          credentials: "include",
-          body: JSON.stringify({ name, secondname, email, tel }),
-        }
-      );
+      const response = await fetch(`${URL}/contato/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+        },
+        credentials: "include",
+        body: JSON.stringify({ name, secondname, email, tel }),
+      });
       const data = await response.json();
 
       if (!data.success) {

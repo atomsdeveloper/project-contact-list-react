@@ -10,18 +10,18 @@ import { useAuthContext } from "../_context/authContext";
 // Libs
 import Swal from "sweetalert2";
 
+// Url
+import { URL } from "../../services/urlConfig";
+
 export const Header = () => {
   const { hasUser, setHasUser } = useAuthContext();
 
   const handleLogout = async () => {
-    const response = await fetch(
-      "https://project-contact-list-node-production.up.railway.app/logout",
-      {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    const response = await fetch(`${URL}/logout`, {
+      method: "GET",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+    });
 
     if (response.ok) {
       const data = await response.json();
