@@ -28,14 +28,11 @@ export const Login = () => {
   }, [setHasUser]);
 
   const fetchLogin = async () => {
-    const csrfToken = localStorage.getItem("csrfToken");
-
     try {
       const response = await fetch(`${URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken,
         },
         body: JSON.stringify({ email, password }),
         credentials: "include",

@@ -8,7 +8,7 @@ import { URL } from "../../services/urlConfig";
 export const ContactContext = React.createContext();
 
 export const ContactProvider = ({ children }) => {
-  const [data, setData] = React.useState({ contatos: [], csrfToken: "" });
+  const [data, setData] = React.useState({ contatos: [] });
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -27,11 +27,11 @@ export const ContactProvider = ({ children }) => {
 
         const datas = await response.json();
 
-        if (!datas.csrfToken || !datas.contatos) {
-          throw new Error("Dados incompletos recebidos da API.");
+        if (!datas.contatos) {
+          throw new Error("Dados não recebidos da API.");
         }
 
-        setData({ contatos: datas.contatos, csrfToken: datas.csrfToken });
+        setData({ contatos: datas.contatos });
 
         // Salva no localStorage
         localStorage.setItem("csrfToken", datas.csrfToken);
