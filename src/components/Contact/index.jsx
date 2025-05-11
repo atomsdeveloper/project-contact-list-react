@@ -1,6 +1,7 @@
 import * as S from "./styles";
 
 import React from "react";
+
 import Head from "../_helpers/Head";
 
 // Context
@@ -22,16 +23,14 @@ export const Contact = () => {
   const navigate = useNavigate();
   const { fetchData, csrfToken } = React.useContext(ContactContext); // Usa o contexto
 
+  // Escrever estado para os valores do fomulário
+  const [name, setName] = React.useState("");
+  const [secondname, setSecondName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [tel, setTel] = React.useState("");
+
   const fetchRegisterContact = async (e) => {
     e.preventDefault();
-
-    const form = e.target;
-    const data = new FormData(form);
-
-    const name = data.get("name");
-    const secondname = data.get("secondname");
-    const email = data.get("email");
-    const tel = data.get("tel");
 
     try {
       const response = await fetch(`${URL}/contact/register`, {
@@ -75,30 +74,58 @@ export const Contact = () => {
         description="Agenda SyS, é um sistema de cadatros de contatos para serem visualizados como uma Agenda."
       />
       <S.Form>
-        <h2> Casdastre um contato no sistema. </h2>
-        <form onSubmit={(e) => fetchRegisterContact(e)}>
+        <h2> Faça Login no Sistema </h2>
+        <form>
           <div className="form-group">
-            <label htmlFor="name">Nome</label>
-            <input type="name" name="name" />
+            <label htmlFor="email">Name:</label>
+            <input
+              type="text"
+              name="name"
+              autoComplete="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
           </div>
 
           <div className="form-group">
-            <label htmlFor="secondname">Sobrenome</label>
-            <input type="secondname" name="secondname" />
+            <label htmlFor="lastname">Sobrenome:</label>
+            <input
+              type="text"
+              name="lastname"
+              autoComplete="lastname"
+              value={secondname}
+              onChange={(e) => setSecondName(e.target.value)}
+              required
+            />
           </div>
 
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input type="email" name="email" />
+            <input
+              type="email"
+              name="email"
+              autoComplete="email"
+              value={""}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
 
           <div className="form-group">
-            <label htmlFor="tel">Telefone</label>
-            <input type="tel" name="tel" />
+            <label htmlFor="tel">Telefone:</label>
+            <input
+              type="tel"
+              name="tel"
+              autoComplete="tel"
+              value={tel}
+              onChange={(e) => setTel(e.target.value)}
+              required
+            />
           </div>
-
-          <button type="submit">Salvar</button>
-          <input type="hidden" name="_csrf" value={csrfToken} />
+          <button type="button" onClick={fetchRegisterContact}>
+            Entrar
+          </button>
         </form>
       </S.Form>
     </S.Container>
