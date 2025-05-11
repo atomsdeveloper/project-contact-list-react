@@ -77,8 +77,9 @@ export const Contact = () => {
         <h2> Faça Login no Sistema </h2>
         <form>
           <div className="form-group">
-            <label htmlFor="email">Name:</label>
+            <label htmlFor="name">Name:</label>
             <input
+              id="name"
               type="text"
               name="name"
               autoComplete="name"
@@ -91,9 +92,10 @@ export const Contact = () => {
           <div className="form-group">
             <label htmlFor="lastname">Sobrenome:</label>
             <input
+              id="lastname"
               type="text"
-              name="lastname"
-              autoComplete="lastname"
+              name="secondname"
+              autoComplete="family-name"
               value={secondname}
               onChange={(e) => setSecondName(e.target.value)}
               required
@@ -115,6 +117,7 @@ export const Contact = () => {
           <div className="form-group">
             <label htmlFor="tel">Telefone:</label>
             <input
+              id="tel"
               type="tel"
               name="tel"
               autoComplete="tel"
