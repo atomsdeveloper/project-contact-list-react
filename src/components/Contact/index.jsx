@@ -106,7 +106,7 @@ export const Contact = () => {
               type="email"
               name="email"
               autoComplete="email"
-              value={""}
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
