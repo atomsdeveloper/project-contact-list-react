@@ -93,7 +93,7 @@ export const Contact = () => {
             <input
               type="text"
               name="lastname"
-              autoComplete="lastname"
+              autoComplete="name"
               value={secondname}
               onChange={(e) => setSecondName(e.target.value)}
               required
