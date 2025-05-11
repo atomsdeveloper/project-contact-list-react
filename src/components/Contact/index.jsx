@@ -7,6 +7,9 @@ import Head from "../_helpers/Head";
 // Context
 import { ContactContext } from "../_context/datasContext"; // Importa o contexto
 
+// Lib
+import Swal from "sweetalert2";
+
 // Router
 import { useNavigate } from "react-router-dom";
 
@@ -15,9 +18,6 @@ import P from "prop-types";
 
 // Url
 import { URL } from "../../services/urlConfig";
-
-// Toastify
-import { toast } from "react-toastify";
 
 export const Contact = () => {
   const navigate = useNavigate();
@@ -45,14 +45,25 @@ export const Contact = () => {
       const data = await response.json();
 
       if (!data.success) {
-        data.errors.map(() => toast.error(data.message));
+        Swal.fire({
+          title: "Error!",
+          text: `${data.message}`,
+          icon: "error",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#111111d9",
+        });
       } else {
-        toast.success(data.message);
+        Swal.fire({
+          title: "Success!",
+          text: `Contato criado com sucesso.`,
+          icon: "success",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#111111d9",
+        });
       }
       fetchData();
       navigate("/");
     } catch (error) {
-      toast.error(error);
       console.log("error ao enviar dados pela rota /login.", error);
     }
   };
@@ -82,6 +93,7 @@ export const Contact = () => {
             <input
               type="text"
               name="lastname"
+              autoComplete="lastname"
               value={secondname}
               onChange={(e) => setSecondName(e.target.value)}
               required
