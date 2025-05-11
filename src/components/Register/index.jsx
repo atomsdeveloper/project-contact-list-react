@@ -34,7 +34,7 @@ export const Register = () => {
     }
 
     try {
-      const response = await fetch(`${URL}/register`, {
+      const response = await fetch(`${URL}/contact/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
