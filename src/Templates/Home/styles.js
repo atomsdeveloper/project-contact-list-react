@@ -12,15 +12,21 @@ export const ContainerTable = styled.section`
   margin-top: 2rem;
   overflow-x: auto;
   border-radius: 8px;
+
+  background-color: #eee;
 `;
 
 export const Table = styled.table`
   min-width: 750px;
   border-collapse: collapse;
 
+  th {
+    text-align: center;
+  }
+
   th,
   td {
-    text-align: left;
+    border-bottom: 1px solid #000;
     padding: 0.725rem;
   }
 

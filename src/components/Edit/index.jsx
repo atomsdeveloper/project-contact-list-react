@@ -16,10 +16,13 @@ import P from "prop-types";
 // Lib
 import Swal from "sweetalert2";
 
+// URL
+import { URL } from "../../services/urlConfig";
+
 export const Edit = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { fetchData, csrfToken } = React.useContext(ContactContext); // Usa o contexto
+  const { data } = React.useContext(ContactContext); // Usa o contexto
   const [formData, setFormData] = React.useState({
     name: "",
     secondname: "",
@@ -27,19 +30,18 @@ export const Edit = () => {
     tel: "",
   });
 
+  const csrfToken = data.csrfToken;
+
   const fetchBuscarId = async () => {
     try {
-      const response = await fetch(
-        `https://project-contact-list-node-production.up.railway.app/contato/index/${id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": csrfToken,
-          },
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${URL}/contact/index/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+        },
+        credentials: "include",
+      });
       const data = await response.json();
 
       if (data && data.contato) {
@@ -81,18 +83,15 @@ export const Edit = () => {
     e.preventDefault(); // Evita recarregar a página
 
     try {
-      const response = await fetch(
-        `https://project-contact-list-node-production.up.railway.app/contato/edit/${id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": csrfToken,
-          },
-          credentials: "include",
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${URL}/contact/edit/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+        },
+        credentials: "include",
+        body: JSON.stringify(formData),
+      });
 
       const data = await response.json();
 
@@ -104,7 +103,6 @@ export const Edit = () => {
           confirmButtonText: "OK",
           confirmButtonColor: "#111111d9",
         }).then(() => {
-          fetchData(); // Atualiza os contatos sem recarregar
           navigate("/");
         });
       }

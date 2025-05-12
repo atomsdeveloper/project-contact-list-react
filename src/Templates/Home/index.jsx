@@ -21,10 +21,15 @@ import "aos/dist/aos.css";
 // Types
 import P from "prop-types";
 
+// URL
+import { URL } from "../../services/urlConfig";
+
 const Home = () => {
   const { hasUser } = useAuthContext();
 
   const { data } = React.useContext(ContactContext); // Usa o contexto
+  const csrfToken = data.csrfToken;
+
   React.useEffect(() => {
     AOS.init({
       duration: 2500,
@@ -46,17 +51,14 @@ const Home = () => {
   };
 
   const handleDelete = async (id) => {
-    const response = await fetch(
-      `https://project-contact-list-node-production.up.railway.app/contato/delete/${id}`,
-      {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": data.csrfToken,
-        },
-      }
-    );
+    const response = await fetch(`${URL}/contact/delete/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken,
+      },
+    });
 
     const data = await response.json();
 
@@ -99,6 +101,7 @@ const Home = () => {
               <thead>
                 <tr>
                   <th>Nome</th>
+                  <th>Sobrenome</th>
                   <th>Celular</th>
                   <th>E-mail</th>
                   <th>Data</th>
@@ -109,6 +112,7 @@ const Home = () => {
                 <tbody key={index}>
                   <tr>
                     <td>{contato.name}</td>
+                    <td>{contato.secondname}</td>
                     <td>{contato.tel}</td>
                     <td>{contato.email}</td>
                     <td>{formatDate(contato.created)}</td>
@@ -126,7 +130,7 @@ const Home = () => {
                             id="delete"
                             onClick={() => handleDelete(contato._id)}
                           >
-                            <Link to="/">Excluir</Link>
+                            <Link to="#">Excluir</Link>
                           </button>
                         </td>
                       </>
