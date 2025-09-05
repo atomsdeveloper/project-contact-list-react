@@ -1,22 +1,30 @@
+// React
 import React from "react";
+
+// Types
 import P from "prop-types";
 
 // URL
-import { URL } from "../../services/urlConfig";
+import { URL_SERVER } from "../../services/urlConfig";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const ContactContext = React.createContext();
 
 export const ContactProvider = ({ children }) => {
-  const [data, setData] = React.useState({ contatos: [], csrfToken: "" });
+  const [data, setData] = React.useState({
+    contatos: [],
+    csrfToken: "",
+    messages: [],
+  });
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${URL}`, {
+        const response = await fetch(`${URL_SERVER}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            "X-CSRF-Token": data.csrfToken,
           },
           credentials: "include",
         });
@@ -25,16 +33,24 @@ export const ContactProvider = ({ children }) => {
           throw new Error(`Erro de rede: ${response.status}`);
         }
 
-        const datas = await response.json();
+        const responseFetchHome = await response.json();
 
-        if (!datas.csrfToken || !datas.contatos) {
+        if (data.error) {
+          throw new Error(`Erro: ${responseFetchHome.error}`);
+        }
+
+        if (!responseFetchHome.csrfToken || !responseFetchHome.contatos) {
           throw new Error("Dados incompletos recebidos da API.");
         }
 
-        setData({ contatos: datas.contatos, csrfToken: datas.csrfToken });
+        setData({
+          contatos: responseFetchHome.contatos,
+          csrfToken: responseFetchHome.csrfToken,
+          messages: responseFetchHome.messages,
+        });
 
         // Salva no localStorage
-        localStorage.setItem("csrfToken", datas.csrfToken);
+        localStorage.setItem("csrfToken", responseFetchHome.csrfToken);
       } catch (error) {
         console.error("Erro ao buscar dados de contatos e csrfToken:", error);
       }
