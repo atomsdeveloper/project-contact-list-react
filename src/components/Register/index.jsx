@@ -14,15 +14,19 @@ import Head from "../_helpers/Head";
 
 // Context
 import { ContactContext } from "../_context/datasContext";
+import { useAuthContext } from "../_context/authContext";
 
 // Url
-import { URL } from "../../services/urlConfig";
+import { URL_SERVER } from "../../services/urlConfig";
 
 export const Register = () => {
+  const { hasUser } = useAuthContext();
+
   const navigate = useNavigate();
 
   const { data, loading } = React.useContext(ContactContext);
   const [email, setEmail] = React.useState("");
+  const [name, setName] = React.useState("");
   const [password, setPassword] = React.useState("");
 
   const handleFetchRegister = async (e) => {
@@ -34,34 +38,46 @@ export const Register = () => {
     }
 
     try {
-      const response = await fetch(`${URL}/register/`, {
+      const response = await fetch(`${URL_SERVER}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-CSRF-Token": data.csrfToken, // Enviando o token no cabeçalho
+          Authorization: `Bearer ${hasUser}`,
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, name }),
         credentials: "include",
       });
-      const { errors, message } = await response.json();
-      if (!errors || message) {
-        Swal.fire({
-          title: "Sucesso!",
-          text: `${JSON.stringify(message)}`,
-          icon: "success",
-          confirmButtonText: "OK",
-          confirmButtonColor: "#111111d9",
-        });
-        navigate("/");
-      }
+      const responseFetchRegister = await response.json();
 
-      errors &&
+      responseFetchRegister.message &&
         Swal.fire({
           title: "Error!",
-          text: `${JSON.stringify(message)}`,
+          text: `${responseFetchRegister.message}`,
           icon: "error",
           confirmButtonText: "OK",
-          confirmButtonColor: "#111111d9",
+          confirmButtonColor: "#38bdf8",
+        });
+
+      responseFetchRegister.errors &&
+        Swal.fire({
+          title: "Error!",
+          text: `${responseFetchRegister.errors[0]}`,
+          icon: "error",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#38bdf8",
+        });
+
+      // If not errors
+      responseFetchRegister.success &&
+        Swal.fire({
+          title: "Success!",
+          text: `${responseFetchRegister.success[0]}`,
+          icon: "success",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#38bdf8",
+        }).then(() => {
+          navigate("/login");
         });
     } catch (error) {
       console.log("error ao enviar dados pela rota /register.", error);
@@ -82,8 +98,21 @@ export const Register = () => {
           <h2> Faça cadastro de um usuário no sistema. </h2>
           <form onSubmit={(e) => handleFetchRegister(e)}>
             <div className="form-group">
+              <label htmlFor="name">Nome</label>
+              <input
+                id="name"
+                type="name"
+                name="name"
+                autoComplete="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
+                id="email"
                 type="email"
                 name="email"
                 autoComplete="email"
@@ -95,6 +124,7 @@ export const Register = () => {
             <div className="form-group">
               <label htmlFor="password">Senha</label>
               <input
+                id="password"
                 type="password"
                 name="password"
                 autoComplete="current-password"
@@ -104,7 +134,7 @@ export const Register = () => {
               />
             </div>
             <button type="submit">Cadastrar</button>
-            {/* <input type="hidden" name="_csrf" value={csrfToken} /> */}
+            <input type="hidden" name="_csrf" value={data.csrfToken} />
           </form>
         </S.Form>
       )}

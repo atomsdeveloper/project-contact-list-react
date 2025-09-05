@@ -56,3 +56,36 @@ export const Table = styled.table`
     padding: 0px 15px;
   }
 `;
+
+// Layout not has contact
+export const ContainerNotContacts = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2rem;
+
+  height: calc(100vh - 60px);
+
+  h1 {
+    font-size: 2rem;
+    font-weight: normal;
+    text-align: center;
+  }
+
+  button {
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 8px;
+
+    background-color: #20c420ff;
+    color: aliceblue;
+
+    text-align: center;
+    font-size: 1rem;
+
+    &:hover {
+      background-color: #21a321ff;
+    }
+  }
+`;

@@ -14,12 +14,14 @@ import Head from "../_helpers/Head";
 import { useAuthContext } from "../_context/authContext";
 
 // Url
-import { URL } from "../../services/urlConfig";
+import { URL_SERVER } from "../../services/urlConfig";
 
 export const Login = () => {
   const { setHasUser } = useAuthContext();
+
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -30,8 +32,12 @@ export const Login = () => {
   const fetchLogin = async () => {
     const csrfToken = localStorage.getItem("csrfToken");
 
+    if (!csrfToken) {
+      navigate("/");
+    }
+
     try {
-      const response = await fetch(`${URL}/login`, {
+      const response = await fetch(`${URL_SERVER}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,6 +48,7 @@ export const Login = () => {
       });
       const data = await response.json();
 
+      // TODO: auth not exist, fix in backend to check if has token jwt .
       if (data.auth) {
         sessionStorage.setItem("user", JSON.stringify(data.auth));
         setHasUser(data.auth);
@@ -49,27 +56,26 @@ export const Login = () => {
         console.error("Erro: data.auth está undefined no segundo login");
       }
 
-      if (!data.errors) {
+      if (data.errors) {
         Swal.fire({
-          title: "Sucesso!",
-          text: `${JSON.stringify(data.message)}`,
-          icon: "success",
+          title: "Error!",
+          text: `${data.errors[0]}`,
+          icon: "error",
           confirmButtonText: "OK",
           confirmButtonColor: "#111111d9",
         });
-
-        navigate("/");
       }
 
-      if (data.errors) {
-        data.errors &&
-          Swal.fire({
-            title: "Error!",
-            text: `${JSON.stringify(data.message)}`,
-            icon: "error",
-            confirmButtonText: "OK",
-            confirmButtonColor: "#111111d9",
-          });
+      if (data.success) {
+        Swal.fire({
+          title: "Success!",
+          text: `${data.success[0]}`,
+          icon: "success",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#111111d9",
+        }).then(() => {
+          navigate("/");
+        });
       }
     } catch (error) {
       console.log("error ao enviar dados pela rota /login.", error);
@@ -88,6 +94,7 @@ export const Login = () => {
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
+              id="email"
               type="email"
               name="email"
               autoComplete="email"
@@ -100,6 +107,7 @@ export const Login = () => {
           <div className="form-group">
             <label htmlFor="password">Senha</label>
             <input
+              id="password"
               type="password"
               name="password"
               autoComplete="current-password"

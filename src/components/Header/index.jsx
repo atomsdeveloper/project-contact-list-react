@@ -11,16 +11,17 @@ import { useAuthContext } from "../_context/authContext";
 import Swal from "sweetalert2";
 
 // Url
-import { URL } from "../../services/urlConfig";
+import { URL_SERVER } from "../../services/urlConfig";
 
 export const Header = () => {
   const { hasUser, setHasUser } = useAuthContext();
 
   const handleLogout = async () => {
-    const response = await fetch(`${URL}/logout`, {
+    const response = await fetch(`${URL_SERVER}/logout`, {
       method: "GET",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
+      Authorization: `Bearer ${hasUser}`,
     });
 
     if (response.ok) {

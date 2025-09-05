@@ -1,14 +1,12 @@
+// React
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Lib
 import Swal from "sweetalert2";
 
 // Syled Components
 import * as S from "./styles";
-
-// Helpers
-import Head from "../../components/_helpers/Head";
 
 // Context
 import { ContactContext } from "../../components/_context/datasContext"; // Importa o contexto
@@ -22,13 +20,15 @@ import "aos/dist/aos.css";
 import P from "prop-types";
 
 // URL
-import { URL } from "../../services/urlConfig";
+import { URL_SERVER } from "../../services/urlConfig";
 
 const Home = () => {
   const { hasUser } = useAuthContext();
 
   const { data } = React.useContext(ContactContext); // Usa o contexto
   const csrfToken = data.csrfToken;
+
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     AOS.init({
@@ -51,21 +51,22 @@ const Home = () => {
   };
 
   const handleDelete = async (id) => {
-    const response = await fetch(`${URL}/contact/delete/${id}`, {
+    const response = await fetch(`${URL_SERVER}/contact/delete/${id}`, {
       method: "DELETE",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
         "X-CSRF-Token": csrfToken,
+        Authorization: `Bearer ${hasUser}`,
       },
     });
 
-    const data = await response.json();
+    const responseFetchDelete = await response.json();
 
-    if (!data.success) {
+    if (!responseFetchDelete.success) {
       Swal.fire({
         title: "Aviso!",
-        text: `${data.message}`,
+        text: `${responseFetchDelete.message}`,
         icon: "warning",
         confirmButtonText: "OK",
         confirmButtonColor: "#111111d9",
@@ -74,10 +75,10 @@ const Home = () => {
       });
     }
 
-    if (data.success) {
+    if (responseFetchDelete.success) {
       Swal.fire({
         title: "Sucesso!",
-        text: `${data.message}`,
+        text: `${responseFetchDelete.message}`,
         icon: "success",
         confirmButtonText: "OK",
         confirmButtonColor: "#111111d9",
@@ -87,13 +88,25 @@ const Home = () => {
     }
   };
 
+  function handleRedirectFromRegisterContact() {
+    navigate("/contato");
+  }
+
+  if (data.contatos.length <= 0) {
+    return (
+      <S.ContainerNotContacts>
+        <h1>Ainda não temos contatos cadastrados no sistema.</h1>
+        {hasUser && (
+          <button type="button" onClick={handleRedirectFromRegisterContact}>
+            Criar um contato na agenda.
+          </button>
+        )}
+      </S.ContainerNotContacts>
+    );
+  }
+
   return (
     <>
-      <Head
-        title="Home"
-        description="Agenda SyS, é um sistema de cadatros de contatos para serem visualizados como uma Agenda."
-      />
-
       <S.ContainerHome>
         <S.ContainerTable>
           {data.contatos ? (
@@ -115,12 +128,12 @@ const Home = () => {
                     <td>{contato.secondname}</td>
                     <td>{contato.tel}</td>
                     <td>{contato.email}</td>
-                    <td>{formatDate(contato.created)}</td>
+                    <td>{formatDate(new Date(Date.now()))}</td>
                     {hasUser ? (
                       <>
                         <td>
                           <button id="edit">
-                            <Link to={`/contato/edit/${contato._id}`}>
+                            <Link to={`/contato/edit/${contato.id}`}>
                               Editar
                             </Link>
                           </button>
@@ -128,7 +141,7 @@ const Home = () => {
                         <td>
                           <button
                             id="delete"
-                            onClick={() => handleDelete(contato._id)}
+                            onClick={() => handleDelete(contato.id)}
                           >
                             <Link to="#">Excluir</Link>
                           </button>

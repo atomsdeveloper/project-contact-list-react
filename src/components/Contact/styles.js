@@ -9,15 +9,16 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  h2 {
+    margin-bottom: 20px;
+    font: var(--poppins-32);
+  }
 `;
 
 export const Form = styled.div`
   width: 370px;
   height: 350px;
-
-  h2 {
-    font: var(--poppins-32);
-  }
 
   form {
     width: 100%;

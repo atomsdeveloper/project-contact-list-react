@@ -17,12 +17,18 @@ import P from "prop-types";
 import Swal from "sweetalert2";
 
 // URL
-import { URL } from "../../services/urlConfig";
+import { URL_SERVER } from "../../services/urlConfig";
+import { useAuthContext } from "../_context/authContext";
 
 export const Edit = () => {
+  const { hasUser } = useAuthContext();
+  const { data } = React.useContext(ContactContext);
+
   const navigate = useNavigate();
+
   const { id } = useParams();
-  const { data } = React.useContext(ContactContext); // Usa o contexto
+  console.log("ID: ", id);
+
   const [formData, setFormData] = React.useState({
     name: "",
     secondname: "",
@@ -34,11 +40,12 @@ export const Edit = () => {
 
   const fetchBuscarId = async () => {
     try {
-      const response = await fetch(`${URL}/contact/index/${id}`, {
+      const response = await fetch(`${URL_SERVER}/contact/index/${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           "X-CSRF-Token": csrfToken,
+          Authorization: `Bearer ${hasUser}`,
         },
         credentials: "include",
       });
@@ -52,6 +59,8 @@ export const Edit = () => {
           tel: data.contato.tel || "",
         });
       }
+
+      console.log("Contatos response: ", data);
 
       if (!data.success) {
         Swal.fire({
@@ -83,11 +92,12 @@ export const Edit = () => {
     e.preventDefault(); // Evita recarregar a página
 
     try {
-      const response = await fetch(`${URL}/contact/edit/${id}`, {
+      const response = await fetch(`${URL_SERVER}/contact/edit/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-CSRF-Token": csrfToken,
+          Authorization: `Bearer ${hasUser}`,
         },
         credentials: "include",
         body: JSON.stringify(formData),
@@ -103,7 +113,7 @@ export const Edit = () => {
           confirmButtonText: "OK",
           confirmButtonColor: "#111111d9",
         }).then(() => {
-          navigate("/");
+          window.location.reload();
         });
       }
     } catch (error) {
@@ -118,7 +128,7 @@ export const Edit = () => {
         description="Agenda SyS, é um sistema de cadatros de contatos para serem visualizados como uma Agenda."
       />
       <S.Form>
-        <h2> Edit um contato no sistema. </h2>
+        <h2> Editar contato no sistema. </h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Nome</label>
