@@ -15,6 +15,9 @@ import { Register } from "./components/Register";
 import { Contact } from "./components/Contact";
 import { Edit } from "./components/Edit";
 
+// Helpers
+import Head from "./components/_helpers/Head";
+
 // Lazy Components
 const Home = React.lazy(() => import("./Templates/Home"));
 
@@ -32,7 +35,18 @@ function App() {
 
           <React.Suspense fallback={<Loading />}>
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route
+                path="/"
+                element={
+                  <>
+                    <Head
+                      title="Home"
+                      description="Agenda SyS, é um sistema de cadatros de contatos para serem visualizados como uma Agenda."
+                    />
+                    <Home />
+                  </>
+                }
+              />
 
               {/* Login */}
               <Route path="/login" element={<Login />} />
